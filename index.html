@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DTF Montello - Compre Online</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="logo">DTF MONTELLO</div>
+        <div class="cart-icon" id="cart-icon">
+            <i class="fas fa-shopping-cart"></i>
+            <span id="cart-count">0</span>
+        </div>
+    </header>
+
+    <section class="hero">
+        <h1>TRANSFER DIGITAL DE ALTA QUALIDADE</h1>
+        <p>Impressão durável e vibrante para seus projetos!</p>
+        <div class="price">R$ 39,99</div>
+        <button class="cta-button" id="add-to-cart">ADICIONAR AO CARRINHO</button>
+    </section>
+
+    <section class="product-options">
+        <h2>PERSONALIZE SEU PEDIDO</h2>
+        <div class="options-container">
+            <div class="option">
+                <label for="size">Tamanho:</label>
+                <select id="size">
+                    <option value="30x30">30x30 cm</option>
+                    <option value="A4">A4 (21x29,7 cm)</option>
+                    <option value="A3">A3 (29,7x42 cm)</option>
+                </select>
+            </div>
+            <div class="option">
+                <label for="quantity">Quantidade:</label>
+                <input type="number" id="quantity" min="1" value="1">
+            </div>
+        </div>
+    </section>
+
+    <section class="benefits">
+        <h2>POR QUE ESCOLHER NOSSO DTF?</h2>
+        <div class="benefit-item">
+            <h3><i class="fas fa-shield-alt"></i> Alta Resistência</h3>
+            <p>Não desbota e resiste a lavagens.</p>
+        </div>
+        <div class="benefit-item">
+            <h3><i class="fas fa-print"></i> Fácil Aplicação</h3>
+            <p>Pronto para usar em qualquer tecido.</p>
+        </div>
+        <div class="benefit-item">
+            <h3><i class="fas fa-shipping-fast"></i> Entrega Rápida</h3>
+            <p>Envio imediato após a compra.</p>
+        </div>
+    </section>
+
+    <section class="gallery">
+        <h2>EXEMPLOS DE APLICAÇÃO</h2>
+        <div class="gallery-images">
+            <img src="https://via.placeholder.com/300x200?text=Camiseta+Personalizada" alt="DTF em camiseta">
+            <img src="https://via.placeholder.com/300x200?text=Moletom+Estampado" alt="DTF em moletom">
+            <img src="https://via.placeholder.com/300x200?text=Toalha+Customizada" alt="DTF em toalha">
+        </div>
+    </section>
+
+    <section class="testimonials">
+        <h2>OPINIÃO DOS CLIENTES</h2>
+        <div class="testimonial-card">
+            <p>"A estampa ficou perfeita! Já lavou 5x e continua como nova."</p>
+            <div class="client">— Carlos, São Paulo</div>
+        </div>
+    </section>
+
+    <div class="cart-modal" id="cart-modal">
+        <div class="cart-content">
+            <h2><i class="fas fa-shopping-cart"></i> SEU CARRINHO</h2>
+            <div id="cart-items"></div>
+            <div class="cart-total">
+                <p>TOTAL: <span id="cart-total">R$ 0,00</span></p>
+            </div>
+            <button class="checkout-button" id="checkout-button">FINALIZAR COMPRA</button>
+            <button class="close-cart" id="close-cart">CONTINUAR COMPRANDO</button>
+        </div>
+    </div>
+
+    <a href="https://wa.me/5541996704598" class="whatsapp-float">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <footer>
+        <p>© 2024 DTF MONTELLO - Todos os direitos reservados</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
