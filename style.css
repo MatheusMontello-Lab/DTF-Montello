@@ -1,0 +1,232 @@
+/* ESTILO DO CARRINHO - VERSÃO OTIMIZADA */
+.cart-icon-container {
+  cursor: pointer;
+  position: relative; /* Isso permite que o modal seja posicionado em relação a este elemento */
+  font-size: 1.8rem;
+  color: #00f0ff;
+  transition: transform 0.2s;
+  user-select: none;
+  padding: 0.25rem 0.5rem;
+  border-radius: 8px;
+}
+
+.cart-icon-container:hover {
+  transform: scale(1.1);
+}
+
+.cart-count {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  background: #ff5722;
+  color: white;
+  border-radius: 50%;
+  padding: 2px 6px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  min-width: 18px;
+  text-align: center;
+}
+
+/* OVERLAY DO CARRINHO */
+.cart-overlay {
+  display: none;
+  position: fixed;
+  top: 80px; /* Adicionei um top para começar abaixo do header */
+  left: 10;
+  width: 100vw;
+  height: calc(100vh - 80px); /* Ajuste a altura para compensar o top */
+  background: rgba(0, 0, 0, 0.85);
+  z-index: 3000;
+  justify-content: flex-end;
+  align-items: flex-start; /* Mudei para flex-start para alinhar no topo */
+  transition: opacity 0.3s ease;
+}
+
+.cart-overlay.show {
+  display: block;
+}
+
+.cart-modal {
+  width: 100%;
+  max-width: 380px;
+  background: #001829;
+  border-radius: 20px;
+  padding: 2rem 2.5rem;
+  box-shadow: 0 10px 25px #00f0ff44;
+  color: #a9cfdc;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 100px); /* Ajuste a altura máxima */
+  margin-top: 20px; /* Adicione margem no topo */
+  margin-right: 20px; /* Mantenha a margem lateral se quiser */
+}
+
+.cart-modal h2 {
+  color: #00f0ff;
+  font-size: 1.5rem; /* Tamanho reduzido */
+  font-weight: 500;
+  margin-bottom: 0.8rem;
+  text-align: center;
+}
+
+.cart-content {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding-right: 5px;
+  max-height: 60vh;
+  scrollbar-width: thin;
+  scrollbar-color: #00f0ff44 transparent;
+}
+
+.cart-content::-webkit-scrollbar {
+  width: 4px;
+}
+
+.cart-content::-webkit-scrollbar-thumb {
+  background-color: #00b8d9aa;
+  border-radius: 10px;
+}
+
+/* Seta apontando para o ícone do carrinho */
+.cart-modal::before {
+  content: '';
+  position: absolute;
+  top: -10px;
+  right: 15px;
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 10px solid #001829;
+}
+
+/* ITENS DO CARRINHO */
+.cart-item {
+  display: flex;
+  flex-direction: column;
+  background: #00324f; /* Cor de fundo dos itens como na captura */
+  border-radius: 10px;
+  margin-bottom: 0.8rem;
+  padding: 0.8rem;
+}
+
+.cart-item h4 {
+  color: #00f0ff;
+  margin: 0 0 0.5rem 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.item-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.3rem;
+}
+
+.item-controls button {
+  background: #00b8d9aa;
+  border: none;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  border-radius: 4px;
+  color: #001f2f;
+  font-weight: bold;
+}
+
+.item-controls span {
+  font-weight: bold;
+  color: #fff;
+  min-width: 15px;
+  text-align: center;
+}
+
+.item-price {
+  font-weight: bold;
+  text-align: right;
+  color: #00f0ff;
+  margin-left: auto;
+}
+
+.remove-item {
+  background: none !important;
+  color: #ff5f57 !important;
+  font-size: 1.2rem;
+  cursor: pointer;
+  margin-left: 5px;
+}
+
+/* TOTAL E AÇÕES */
+.cart-total {
+  margin-top: 1rem;
+  padding-top: 0.8rem;
+  border-top: 1px solid #00f0ff88;
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #00f0ff;
+}
+
+.cart-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+  gap: 0.8rem;
+}
+
+.continue-shopping, .checkout {
+  padding: 0.7rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.2s;
+  flex: 1;
+  font-size: 0.9rem;
+}
+
+.continue-shopping {
+  background: transparent;
+  color: #00f0ff;
+  border: 1px solid #00f0ff;
+}
+
+.checkout {
+  background: #00f0ff;
+  color: #001f2f;
+}
+
+/* ESTADO VAZIO */
+.empty-message {
+  color: #66aaff;
+  text-align: center;
+  margin: 1.5rem 0;
+  font-size: 0.9rem;
+}
+
+.view-products {
+  display: inline-block;
+  margin-top: 0.8rem;
+  color: #00f0ff;
+  text-decoration: none;
+  font-weight: bold;
+  padding: 0.4rem 0.8rem;
+  border: 1px solid #00f0ff;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+/* Responsividade para telas menores */
+@media (max-width: 480px) {
+  .cart-overlay {
+    width: 250px;
+    right: -50px; /* Ajusta a posição para centralizar melhor em telas pequenas */
+  }
+  
+  .cart-modal::before {
+    right: 65px; /* Ajusta a posição da seta */
+  }
+}

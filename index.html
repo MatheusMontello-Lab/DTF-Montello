@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Montello DTF</title>
+  <style>
+    /* Reset e base */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #0b0f17 0%, #001f3f 100%);
+      color: #e0e6f8;
+      scroll-behavior: smooth;
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+    a {
+      color: #00f0ff;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    a:hover {
+      color: #00b8d9;
+      text-decoration: underline;
+    }
+
+    header {
+      height: 100vh;
+      background: url('https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1470&q=80') no-repeat center center/cover;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 2rem;
+      color: #00f0ff;
+      text-shadow: 0 0 15px #00f0ff;
+    }
+    header h1 {
+      font-size: 4rem;
+      font-weight: 900;
+      margin-bottom: 1rem;
+      letter-spacing: 3px;
+    }
+    header p {
+      font-size: 1.25rem;
+      max-width: 650px;
+      background: rgba(0, 240, 255, 0.1);
+      padding: 1rem 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 0 30px #00f0ff55;
+      backdrop-filter: blur(5px);
+    }
+
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: rgba(11, 15, 23, 0.85);
+      box-shadow: 0 2px 10px rgba(0, 240, 255, 0.2);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 4000;
+      transition: background 0.3s;
+    }
+    nav .logo {
+      color: #00f0ff;
+      font-size: 1.75rem;
+      font-weight: 900;
+      letter-spacing: 3px;
+      text-shadow: 0 0 10px #00f0ff;
+      cursor: default;
+    }
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 2rem;
+    }
+    nav ul li a {
+      color: #e0e6f8;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: color 0.3s ease;
+      padding: 0.25rem 0.5rem;
+      border-radius: 6px;
+    }
+    nav ul li a:hover {
+      color: #00f0ff;
+      background: rgba(0, 240, 255, 0.15);
+      box-shadow: 0 0 8px #00f0ff;
+    }
+
+    .cart-icon-container {
+      cursor: pointer;
+      position: relative;
+      font-size: 1.8rem;
+      color: #00f0ff;
+      transition: transform 0.2s;
+      user-select: none;
+      padding: 0.25rem 0.5rem;
+      border-radius: 8px;
+    }
+    .cart-icon-container:hover {
+      transform: scale(1.2);
+      color: #00b8d9;
+      text-shadow: 0 0 8px #00b8d9;
+    }
+    .cart-count {
+      position: absolute;
+      top: -10px;
+      right: -12px;
+      background: #ff5722;
+      color: white;
+      border-radius: 50%;
+      padding: 3px 7px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      min-width: 20px;
+      text-align: center;
+      box-shadow: 0 0 8px #ff5722aa;
+    }
+
+    section {
+      padding: 5rem 2rem 4rem;
+      max-width: 1000px;
+      margin: 0 auto;
+      color: #a9cfdc;
+    }
+    section:nth-child(even) {
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 20px;
+      box-shadow: inset 0 0 25px #00f0ff33;
+    }
+    .section-title {
+      font-size: 2.75rem;
+      text-align: center;
+      margin-bottom: 2.5rem;
+      color: #00f0ff;
+      letter-spacing: 1.5px;
+      font-weight: 900;
+      text-shadow: 0 0 10px #00f0ffbb;
+    }
+
+    .card {
+      background: linear-gradient(135deg, #002a3a 0%, #004a60 100%);
+      border: 2px solid #00f0ff;
+      border-radius: 24px;
+      padding: 2rem 3rem;
+      margin: 1rem auto 2rem;
+      box-shadow: 0 0 25px #00f0ff88;
+      max-width: 880px;
+      color: #e0e6f8;
+      font-weight: 500;
+      font-size: 1.1rem;
+      line-height: 1.8;
+    }
+
+    /* Produto */
+    .product {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.25rem;
+      padding: 1rem 1.5rem;
+      background: rgba(0, 240, 255, 0.1);
+      border-radius: 14px;
+      box-shadow: 0 0 15px #00f0ff44;
+      font-weight: 600;
+      font-size: 1.1rem;
+      transition: background 0.3s ease;
+    }
+    .product:hover {
+      background: rgba(0, 240, 255, 0.3);
+      box-shadow: 0 0 25px #00f0ffaa;
+    }
+
+    .product > div {
+      flex: 1;
+    }
+    .product span {
+      display: block;
+      font-size: 1.3rem;
+      margin-bottom: 6px;
+      color: #00f0ff;
+      text-shadow: 0 0 8px #00f0ffaa;
+    }
+    .product p {
+      font-weight: 700;
+      color: #00b8d9;
+      font-size: 1.1rem;
+    }
+    .product button {
+      background: linear-gradient(135deg, #00f0ff, #00b8d9);
+      border: none;
+      border-radius: 12px;
+      padding: 0.65rem 1.6rem;
+      font-weight: 900;
+      color: #001f2f;
+      cursor: pointer;
+      box-shadow: 0 0 15px #00b8d9aa;
+      transition: all 0.3s ease;
+      font-size: 1rem;
+      user-select: none;
+    }
+    .product button:hover {
+      background: #001f2f;
+      color: #00f0ff;
+      box-shadow: 0 0 20px #00f0ff;
+      transform: scale(1.1);
+    }
+
+    /* Carrinho modal */
+    .cart-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 800vh;
+      background: rgba(0, 0, 0, 0.85);
+      z-index: 3000;
+      justify-content: flex-end;
+      transition: opacity 0.3s ease;
+    }
+    .cart-overlay.show {
+      display: flex;
+    }
+    .cart-modal {
+      width: 100%;
+      max-width: 380px;
+      background: #001829;
+      border-radius: 20px 0 0 20px;
+      padding: 2rem 2.5rem;
+      box-shadow: -10px 0 25px #00f0ff44;
+      color: #a9cfdc;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      max-height: 75vh;
+    }
+    .cart-modal h2 {
+      color: #00f0ff;
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      text-align: center;
+      letter-spacing: 2px;
+      text-shadow: 0 0 15px #00f0ffcc;
+    }
+    .cart-content {
+      flex-grow: 1;
+      overflow-y: auto;
+      padding-right: 10px;
+      scrollbar-width: thin;
+      scrollbar-color: #00f0ff44 transparent;
+    }
+    .cart-content::-webkit-scrollbar {
+      width: 8px;
+    }
+    .cart-content::-webkit-scrollbar-thumb {
+      background-color: #00b8d9aa;
+      border-radius: 12px;
+    }
+    .cart-item {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      background: #00324f;
+      border-radius: 14px;
+      margin-bottom: 1rem;
+      padding: 1rem 1.2rem;
+      box-shadow: 0 0 10px #00f0ff66 inset;
+    }
+    .cart-item h4 {
+      flex: 1 1 100%;
+      color: #00b8d9;
+      margin-bottom: 0.5rem;
+      font-weight: 700;
+      text-shadow: 0 0 5px #00b8d9cc;
+    }
+    .item-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .item-controls button {
+      background: #00b8d9aa;
+      border: none;
+      width: 26px;
+      height: 26px;
+      border-radius: 6px;
+      color: #001f2f;
+      font-weight: 900;
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.3s ease;
+    }
+    .item-controls button:hover {
+      background: #00f0ff;
+      color: #001f2f;
+      box-shadow: 0 0 6px #00f0ffbb;
+    }
+    .item-controls span {
+      font-weight: 900;
+      color: #00f0ff;
+      min-width: 20px;
+      text-align: center;
+      font-size: 1.1rem;
+      text-shadow: 0 0 8px #00b8d9cc;
+    }
+    .item-price {
+      font-weight: 700;
+      color: #00f0ff;
+      margin-left: auto;
+      min-width: 80px;
+      text-align: right;
+      font-size: 1.1rem;
+      text-shadow: 0 0 5px #00f0ffaa;
+    }
+    .remove-item {
+      background: none;
+      border: none;
+      color: #ff5f57;
+      font-size: 1.4rem;
+      cursor: pointer;
+      margin-left: 10px;
+      font-weight: 900;
+      user-select: none;
+      transition: color 0.3s ease;
+    }
+    .remove-item:hover {
+      color: #ff2e1f;
+      text-shadow: 0 0 8px #ff2e1faa;
+    }
+
+    .cart-total {
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 2px solid #00f0ff88;
+      text-align: right;
+      font-size: 1.4rem;
+      font-weight: 900;
+      color: #00f0ff;
+      text-shadow: 0 0 15px #00f0ffbb;
+    }
+    .cart-actions {
+      margin-top: 1.5rem;
+      display: flex;
+      gap: 1rem;
+    }
+    .cart-actions button {
+      flex: 1;
+      padding: 0.75rem 1rem;
+      border-radius: 14px;
+      border: none;
+      font-weight: 900;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      user-select: none;
+      box-shadow: 0 0 10px #00f0ff88;
+    }
+    .continue-shopping {
+      background: transparent;
+      color: #00f0ff;
+      border: 2px solid #00f0ff;
+      text-shadow: 0 0 8px #00f0ffaa;
+    }
+    .continue-shopping:hover {
+      background: #00f0ff;
+      color: #001f2f;
+      box-shadow: 0 0 15px #00f0ffee;
+    }
+    .checkout {
+      background: #00f0ff;
+      color: #001f2f;
+      box-shadow: 0 0 15px #00f0ffee;
+    }
+    .checkout:hover {
+      background: #00b8d9;
+      box-shadow: 0 0 20px #00b8d9ff;
+    }
+
+    .empty-message {
+      text-align: center;
+      padding: 2rem 0;
+      font-size: 1.25rem;
+      color: #66aaff;
+      font-weight: 600;
+    }
+    .view-products {
+      display: inline-block;
+      margin-top: 1rem;
+      color: #00f0ff;
+      font-weight: 900;
+      letter-spacing: 0.05em;
+      border: 2px solid #00f0ff;
+      padding: 0.5rem 1.5rem;
+      border-radius: 14px;
+      transition: background-color 0.3s ease;
+      user-select: none;
+    }
+    .view-products:hover {
+      background-color: #00f0ff;
+      color: #001f2f;
+      box-shadow: 0 0 15px #00f0ffbb;
+      text-decoration: none;
+    }
+
+    /* Notificação do carrinho (toast) */
+    .cart-toast {
+      position: fixed;
+      top: 800px;
+      right: 20px;
+      background: #001f2fdd;
+      color: #00f0ff;
+      padding: 14px 22px;
+      border-radius: 14px;
+      box-shadow: 0 0 12px #00f0ffcc;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      max-width: 320px;
+      z-index: 4000;
+      opacity: 0;
+      transform: translateX(40px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+      pointer-events: none;
+      text-align: center;
+      user-select: none;
+    }
+    .cart-toast.show {
+      opacity: 1;
+      transform: translateX(0);
+      pointer-events: auto;
+      animation: pulseToast 3s forwards;
+    }
+    @keyframes pulseToast {
+      0%   { transform: translateX(40px) scale(0.9); opacity: 0;}
+      10%  { transform: translateX(0px) scale(1); opacity: 1;}
+      90%  { transform: translateX(0px) scale(1); opacity: 1;}
+      100% { transform: translateX(40px) scale(0.9); opacity: 0;}
+    }
+
+    /* Seção Arte Personalizada */
+    #arte .card p {
+      font-size: 1.1rem;
+      color: #c0dfff;
+      line-height: 1.7;
+      max-width: 700px;
+      margin: 0 auto;
+      text-align: center;
+      text-shadow: 0 0 5px #00f0ff88;
+    }
+
+    /* Contato */
+    #contato .card {
+      max-width: 700px;
+      margin: 0 auto;
+      background: linear-gradient(135deg, #001a2f, #003355);
+      border-radius: 20px;
+      box-shadow: 0 0 30px #00f0ff88;
+      padding: 2rem 3rem;
+      color: #c0dfff;
+    }
+    #contato form input, #contato form textarea {
+      width: 100%;
+      margin-bottom: 1.3rem;
+      padding: 0.75rem 1rem;
+      border-radius: 12px;
+      border: none;
+      background: #002342;
+      color: #a9d6ff;
+      font-size: 1rem;
+      font-weight: 600;
+      box-shadow: inset 0 0 8px #00f0ff44;
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+    #contato form input::placeholder, #contato form textarea::placeholder {
+      color: #87cefaaa;
+      font-weight: 500;
+    }
+    #contato form input:focus,
+    #contato form textarea:focus {
+      outline: none;
+      background: #003355;
+      color: #d0e7ff;
+      box-shadow: 0 0 15px #00b8d9;
+      transition: box-shadow 0.3s ease;
+    }
+    #contato form textarea {
+      resize: vertical;
+      min-height: 120px;
+      font-family: inherit;
+    }
+    #contato form button {
+      background: linear-gradient(135deg, #00f0ff, #00b8d9);
+      width: 100%;
+      padding: 0.85rem;
+      font-weight: 900;
+      border: none;
+      border-radius: 16px;
+      cursor: pointer;
+      font-size: 1.1rem;
+      color: #001f2f;
+      box-shadow: 0 0 25px #00b8d9aa;
+      transition: all 0.3s ease;
+      user-select: none;
+    }
+    #contato form button:hover {
+      background: #001f2f;
+      color: #00f0ff;
+      box-shadow: 0 0 30px #00f0ff;
+      transform: scale(1.05);
+    }
+    #contato p.contact-text {
+      margin-top: 1rem;
+      text-align: center;
+      font-weight: 600;
+      font-size: 1rem;
+      color: #00b8d9;
+      text-shadow: 0 0 10px #00b8d9bb;
+    }
+    #contato p.contact-text a {
+      color: #00f0ff;
+      font-weight: 900;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+    #contato p.contact-text a:hover {
+      color: #00b8d9;
+      text-decoration: underline;
+      text-shadow: 0 0 20px #00b8d9;
+    }
+
+    /* Rodapé */
+    footer {
+      margin-top: 3rem;
+      padding: 2rem 1rem;
+      background: #00182e;
+      color: #7db8e4;
+      text-align: center;
+      font-weight: 600;
+      font-size: 0.95rem;
+      box-shadow: inset 0 10px 10px -10px #00b8d9aa;
+      user-select: none;
+    }
+    footer .social-links {
+      margin-top: 1rem;
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+    }
+    footer .social-links a {
+      color: #00f0ff;
+      font-size: 1.8rem;
+      transition: color 0.3s ease;
+      text-shadow: 0 0 10px #00f0ffbb;
+    }
+    footer .social-links a:hover {
+      color: #00b8d9;
+      text-shadow: 0 0 20px #00b8d9ff;
+    }
+  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body>
+  <header>
+    <h1>Montello DTF</h1>
+    <p>Impressões digitais de alta qualidade com tecnologia DTF. Traga sua arte ou escolha nossos designs exclusivos.</p>
+  </header>
+
+  <nav>
+    <div class="logo">Montello DTF</div>
+    <ul>
+      <li><a href="#lancamentos">Lançamentos</a></li>
+      <li><a href="#produtos">Produtos</a></li>
+      <li><a href="#arte">Arte</a></li>
+      <li><a href="#galeria">Galeria</a></li>
+      <li><a href="#contato">Contato</a></li>
+    </ul>
+    <div class="cart-icon-container" aria-label="Abrir carrinho" role="button" tabindex="0">
+      🛒 <span class="cart-count">0</span>
+    </div>
+  </nav>
+
+  <!-- CARRINHO MODAL -->
+  <div class="cart-overlay" aria-hidden="true">
+    <div class="cart-modal" role="dialog" aria-modal="true" aria-labelledby="cart-title" style="margin-top: 100px;">
+      <h2 id="cart-title">Seu Carrinho</h2>
+      <div class="cart-content" tabindex="0">
+        <!-- Conteúdo será preenchido dinamicamente -->
+      </div>
+      <div class="cart-actions">
+        <button class="continue-shopping" aria-label="Continuar comprando">Continuar Comprando</button>
+        <button class="checkout" aria-label="Finalizar compra">Finalizar Compra</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notificação do carrinho (toast) -->
+  <div class="cart-toast" id="cart-toast" role="alert" aria-live="assertive"></div>
+
+  <section id="lancamentos">
+    <h2 class="section-title">Lançamentos</h2>
+    <div class="card">
+      <p>Confira os lançamentos exclusivos com design inovador e materiais de alta qualidade.</p>
+    </div>
+  </section>
+
+  <section id="produtos">
+    <h2 class="section-title">Produtos</h2>
+    <div class="card">
+      <div class="product">
+        <div>
+          <span>Camiseta DTF Neon</span>
+          <p>R$ 39,99</p>
+        </div>
+        <button class="add-to-cart" data-name="Camiseta DTF Neon" data-price="39.99" aria-label="Adicionar Camiseta DTF Neon ao carrinho">Adicionar</button>
+      </div>
+      <div class="product">
+        <div>
+          <span>Camiseta DTF Vintage Motors</span>
+          <p>R$ 39,99</p>
+        </div>
+        <button class="add-to-cart" data-name="Camiseta DTF Vintage Motors" data-price="39.99" aria-label="Adicionar Camiseta DTF Vintage Motors ao carrinho">Adicionar</button>
+      </div>
+      <div class="product">
+        <div>
+          <span>Camiseta DTF Abstrata</span>
+          <p>R$ 39,99</p>
+        </div>
+        <button class="add-to-cart" data-name="Camiseta DTF Abstrata" data-price="39.99" aria-label="Adicionar Camiseta DTF Abstrata ao carrinho">Adicionar</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="arte">
+    <h2 class="section-title">Arte Personalizada</h2>
+    <div class="card">
+      <p>Envie sua arte ou peça uma criação única com nossa equipe de design futurista.</p>
+      <p>Aceitamos imagens em PNG, PSD ou vetores, e desenvolvemos conforme sua ideia. Entre em contato para solicitar seu orçamento personalizado.</p>
+    </div>
+  </section>
+
+  <section id="galeria">
+    <h2 class="section-title">Galeria</h2>
+    <div class="card gallery" style="display:grid; grid-template-columns: repeat(auto-fit,minmax(280px,1fr)); gap:1rem;">
+      <img src="https://via.placeholder.com/300x200" alt="Exemplo 1" style="border-radius:12px;box-shadow: 0 0 15px #00f0ff55;" />
+      <img src="https://via.placeholder.com/300x200" alt="Exemplo 2" style="border-radius:12px;box-shadow: 0 0 15px #00f0ff55;" />
+      <img src="https://via.placeholder.com/300x200" alt="Exemplo 3" style="border-radius:12px;box-shadow: 0 0 15px #00f0ff55;" />
+      <img src="https://via.placeholder.com/300x200" alt="Exemplo 4" style="border-radius:12px;box-shadow: 0 0 15px #00f0ff55;" />
+    </div>
+  </section>
+
+  <section id="contato">
+    <h2 class="section-title">Contato</h2>
+    <div class="card">
+      <form onsubmit="enviarFormulario(event)">
+        <input type="text" placeholder="Nome" required />
+        <input type="email" placeholder="Email" required />
+        <textarea rows="4" placeholder="Mensagem" required></textarea>
+        <button type="submit">Enviar</button>
+      </form>
+      <p class="contact-text">Ou fale com a gente pelo <a href="https://wa.me/41996704598" target="_blank" rel="noopener noreferrer">WhatsApp</a></p>
+    </div>
+  </section>
+
+  <footer>
+    <div>© 2025 Montello DTF - Todos os direitos reservados</div>
+    <div class="social-links" aria-label="Redes sociais">
+      <a href="https://www.facebook.com/profile.php?id=61576715360918" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+      <a href="https://www.instagram.com/montello.dtf/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+      <a href="https://wa.me/41996704598" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+    </div>
+  </footer>
+
+  <script src="https://kit.fontawesome.com/yourkitid.js" crossorigin="anonymous"></script>
+  <script>
+    // Recupera o carrinho do localStorage ou cria um novo
+    const cart = JSON.parse(localStorage.getItem('montello-cart')) || {
+      items: [],
+      total: 0
+    };
+
+    // Seleciona elementos principais
+    const cartIcon = document.querySelector('.cart-icon-container');
+    const cartOverlay = document.querySelector('.cart-overlay');
+    const cartContent = document.querySelector('.cart-content');
+    const cartCount = document.querySelector('.cart-count');
+    const continueShoppingBtn = document.querySelector('.continue-shopping');
+    const cartToast = document.getElementById('cart-toast');
+
+    // Notificação (toast)
+    function showToast(message) {
+      cartToast.textContent = message;
+      cartToast.classList.add('show');
+      setTimeout(() => {
+        cartToast.classList.remove('show');
+      }, 3000); // 3 segundos
+    }
+
+    // Atualiza carrinho (contador e conteúdo)
+    function updateCart() {
+      const totalItems = cart.items.reduce((sum, item) => sum + item.quantity, 0);
+      cartCount.textContent = totalItems;
+
+      if (cart.items.length === 0) {
+        cartContent.innerHTML = `
+          <div class="empty-message">
+            <p>Seu carrinho está vazio.</p>
+            <a href="#produtos" class="view-products">Ver Produtos</a>
+          </div>
+        `;
+      } else {
+        cartContent.innerHTML = `
+          <p>${totalItems} itens no carrinho.</p>
+          ${cart.items.map(item => `
+            <div class="cart-item" data-name="${item.name}">
+              <h4>${item.name}</h4>
+              <div class="item-controls">
+                <button class="decrease" aria-label="Diminuir quantidade de ${item.name}">-</button>
+                <span>${item.quantity}</span>
+                <button class="increase" aria-label="Aumentar quantidade de ${item.name}">+</button>
+              </div>
+              <p class="item-price">R$ ${(item.price * item.quantity).toFixed(2).replace('.', ',')}</p>
+              <button class="remove-item" aria-label="Remover ${item.name} do carrinho">×</button>
+            </div>
+          `).join('')}
+          <div class="cart-total">
+            <h3>Total: R$ ${cart.total.toFixed(2).replace('.', ',')}</h3>
+          </div>
+        `;
+      }
+      localStorage.setItem('montello-cart', JSON.stringify(cart));
+    }
+
+    // Função para adicionar produto ao carrinho
+    function addToCart(name, price) {
+      const existingItem = cart.items.find(item => item.name === name);
+      if (existingItem) {
+        existingItem.quantity++;
+      } else {
+        cart.items.push({ name, price, quantity: 1 });
+      }
+
+      cart.total = cart.items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+      updateCart();
+      showToast(`${name} foi adicionado ao carrinho!`);
+    }
+
+    // Botões "Adicionar ao carrinho"
+    document.querySelectorAll('.add-to-cart').forEach(button => {
+      button.addEventListener('click', () => {
+        const name = button.dataset.name;
+        const price = parseFloat(button.dataset.price);
+        addToCart(name, price);
+      });
+    });
+
+    // Controles dentro do carrinho (aumentar, diminuir, remover)
+    cartContent.addEventListener('click', e => {
+      const itemElement = e.target.closest('.cart-item');
+      if (!itemElement) return;
+
+      const itemName = itemElement.dataset.name;
+      const item = cart.items.find(i => i.name === itemName);
+      if (!item) return;
+
+      if (e.target.classList.contains('increase')) {
+        item.quantity++;
+      } else if (e.target.classList.contains('decrease')) {
+        item.quantity = Math.max(1, item.quantity - 1);
+      } else if (e.target.classList.contains('remove-item')) {
+        cart.items = cart.items.filter(i => i.name !== itemName);
+      }
+
+      cart.total = cart.items.reduce((sum, i) => sum + i.price * i.quantity, 0);
+      updateCart();
+    });
+
+    // Abrir/fechar carrinho com toggle
+    cartIcon.addEventListener('click', () => {
+      if (cartOverlay.style.display === 'flex') {
+        cartOverlay.style.display = 'none';
+        cartOverlay.setAttribute('aria-hidden', 'true');
+      } else {
+        cartOverlay.style.display = 'flex';
+        cartOverlay.setAttribute('aria-hidden', 'false');
+      }
+    });
+
+    // Fechar carrinho ao clicar em "Continuar comprando"
+    continueShoppingBtn?.addEventListener('click', () => {
+      cartOverlay.style.display = 'none';
+      cartOverlay.setAttribute('aria-hidden', 'true');
+    });
+
+    // Fechar carrinho ao clicar fora do modal
+    cartOverlay.addEventListener('click', e => {
+      if (e.target === cartOverlay) {
+        cartOverlay.style.display = 'none';
+        cartOverlay.setAttribute('aria-hidden', 'true');
+      }
+    });
+
+    // Formulário contato
+    function enviarFormulario(event) {
+      event.preventDefault();
+      alert('Mensagem enviada com sucesso!');
+      event.target.reset();
+    }
+
+    // Inicializa carrinho
+    updateCart();
+  </script>
+</body>
+</html>
